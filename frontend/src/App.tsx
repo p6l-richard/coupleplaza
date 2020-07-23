@@ -3,6 +3,8 @@ import './App.css';
 import {Container, Row, Col} from 'reactstrap'
 import Header from './components/Header'
 import Homepage from './components/Homepage'
+import Error from './components/Error'
+import { Switch, Route } from 'react-router-dom';
 
 function App() {
   return (
@@ -14,7 +16,11 @@ function App() {
       </Row>
       <Row>
         <Col>
-          <Homepage />         
+        <Switch>
+          <Route path='/' component={Homepage} exact />
+          {/* <Route path='/login' component={Login} exact /> */}
+          <Route component={Error}/>
+        </Switch>
         </Col>
       </Row>
     </Container>
