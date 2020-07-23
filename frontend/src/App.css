@@ -5,16 +5,4 @@
   text-align: center;
 }
 
-.jumbotron {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)),url("https://images.unsplash.com/photo-1509728471135-2d3b72d6e05f")  center center / cover no-repeat;
-  height: 100vh;
-  color: white;
-}
-
-.second  {
-  background-color: #F7F6F7;
-}
 
