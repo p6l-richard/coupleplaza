@@ -3,6 +3,9 @@ import {
     Container, Row, Col
     , Card, CardBody, CardTitle, CardImg, CardImgOverlay, CardText
 } from 'reactstrap';
+import CountrySelector from './CountrySelector';
+import FilterSelector from './FilterSelector'
+import AddIcon from '@material-ui/icons/Add';
 
 export interface ISerpProps {
 }
@@ -59,7 +62,20 @@ const CARDS_PER_ROW = 4;
 export default class Serp extends React.Component<ISerpProps> {
   public render() {
     return (
-      <Container fluid="xs">
+        <div>
+      <Container >
+          <Row>              
+              <Col className="d-flex justify-content-start">
+                <FilterSelector regions={filterAreasOf(cities)} />
+              </Col>
+              <Col className="d-flex flex-row justify-content-around align-items-center">
+                <small className="font-weight-light">Showing results for...</small>
+                <CountrySelector country="Germany" />
+                <CountrySelector country="Brazil" />
+              </Col>
+          </Row>
+          {/* <Row>               */}
+          <hr className="my-6"/>
           {filterAreasOf(cities).map((area: any) => {
               return (
                   <Row className="my-6">
@@ -68,11 +84,11 @@ export default class Serp extends React.Component<ISerpProps> {
                           {area}
                       </h2>
                       { Array.from({length: Math.ceil(citiesFor(area).length / CARDS_PER_ROW)}, (x, i) => i).map(function (rowIx: any) {
-                            const start = rowIx * CARDS_PER_ROW;
-                            const end = start + CARDS_PER_ROW;
-                            const citiesByRow = citiesFor(area).slice(start, end)
-                            return (
-                                    <Row className="my-3">
+                          const start = rowIx * CARDS_PER_ROW;
+                          const end = start + CARDS_PER_ROW;
+                          const citiesByRow = citiesFor(area).slice(start, end)
+                          return (
+                              <Row className="my-3">
         
                                     {citiesByRow.map((city: any) => {
                                         return (
@@ -120,12 +136,14 @@ export default class Serp extends React.Component<ISerpProps> {
                                     
                                     </Row>
                             )      
-                    })}
+                        })}
                         </Col>
                     </Row>
               )
-          })}
+            })}
+            {/* </Row> */}
       </Container>
+            </div>
     );
   }
 }
