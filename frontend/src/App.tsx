@@ -3,6 +3,7 @@ import './App.css';
 import {Container, Row, Col} from 'reactstrap'
 import Header from './components/Header'
 import Homepage from './components/Homepage'
+import Serp from './components/Serp'
 import Error from './components/Error'
 import { Switch, Route } from 'react-router-dom';
 
@@ -18,7 +19,7 @@ function App() {
         <Col>
         <Switch>
           <Route path='/' component={Homepage} exact />
-          {/* <Route path='/login' component={Login} exact /> */}
+          <Route path='/cities' component={Serp} exact />
           <Route component={Error}/>
         </Switch>
         </Col>
