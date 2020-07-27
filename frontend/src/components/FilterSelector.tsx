@@ -2,9 +2,9 @@ import React, { ReactElement } from 'react'
 import AddIcon from '@material-ui/icons/Add';
 import { 
     UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
-    , InputGroup
+    , InputGroup, FormGroup, Form, Label, Input, CustomInput
     , Row, Col
-    , FormGroup, Form, Label, CustomInput
+    , 
 } from 'reactstrap';
 
 interface Props {
@@ -23,31 +23,31 @@ export default function FilterSelector(props): ReactElement {
                   <DropdownMenu >
                     <Form>
                         <DropdownItem header>Stay</DropdownItem>
-                        <FormGroup className="d-flex flex-inline align-items-stretch">
+                        <FormGroup className="d-flex flex-inline">
                             {stayOptions.map((stayOption: any) => {
-                                return <Col><CustomInput type="checkbox" id="some-id" label={stayOption} /></Col>
+                                return <Label className="pl-5"><Input type="checkbox" id="some-id"  />{stayOption}</Label>
                                 
                             })}
                         </FormGroup>
                     </Form>
                     <Form>
                         <DropdownItem header>Regions</DropdownItem>
-                        <FormGroup className="d-flex flex-inline align-items-stretch">
+                        <FormGroup className="d-flex flex-inline" >
                                 {props.regions.map((region: any) => {
-                                    return <Col><CustomInput type="checkbox" id="some-id" label={region}  /></Col>
+                                    return <Label className="pl-5" ><Input  type="checkbox" id="some-id" />{region}</Label> 
                                 })}
                         </FormGroup>
                     </Form>
                     <Form>
                         <DropdownItem header>Costs</DropdownItem>
-                        <FormGroup className="d-flex flex-inline align-items-stretch">
-                                <Col><CustomInput type="checkbox" id="exampleCustomCheckbox" label="Free"  /></Col>
+                        <FormGroup className="d-flex flex-inline">
+                                <Label className="pl-5"><Input type="checkbox" id="exampleCustomCheckbox" />Free</Label>
                         </FormGroup>
                     </Form>
                     <Form>
                         <DropdownItem header>Visa Required</DropdownItem>
-                        <FormGroup className="d-flex flex-inline align-items-stretch">
-                                <Col><CustomInput type="checkbox" id="exampleCustomCheckbox" label="Visa-free &amp; on-arrival only"  /></Col>
+                        <FormGroup className="d-flex flex-inline">
+                                <Label className="pl-5"><Input type="checkbox" id="exampleCustomCheckbox" />No Visa or on-arrival</Label>
                         </FormGroup>
                     </Form>
                   </DropdownMenu>
