@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import {Container, Row, Col} from 'reactstrap'
 import Header from './components/Header'
-import Homepage from './components/Homepage'
-import Serp from './components/Serp'
-import Error from './components/Error'
+import Homepage from './components/pages/Homepage'
+import Serp from './components/pages/Serp'
+import Error from './components/pages/Error'
 import { Switch, Route } from 'react-router-dom';
 
 function App() {
