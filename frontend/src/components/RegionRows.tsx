@@ -131,10 +131,6 @@ export default function RegionRows(props): ReactElement {
                                                                     <Row >⌛</Row>
                                                                 </Col>
                                                                 {props.citizenships.map((citizenship: string, ix) => {
-                                                                    let divider;
-                                                                    if (ix === 0) {
-                                                                        divider = <Col xs="1" className="border-left" />
-                                                                    }
                                                                     return (
                                                                         <Col>
                                                                             {dataToShow.map((dataPoint: string) => {
