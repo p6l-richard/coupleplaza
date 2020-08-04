@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "41050094-7b38-4287-80c1-db87e3c0dbdf",
+		"name": "CouplePlaza",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "DEV",
+			"item": [
+				{
+					"name": "Homepage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "de42ef3d-e80a-4eaa-a222-8976d8ef3dd3",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var cheerio = require('cheerio');\r",
+									"\r",
+									"var $ = cheerio.load(pm.response.text)\r",
+									"pm.test('Page header should be set', function () {\r",
+									"    pm.expect($('h1').text()).to.contain('CloudPlaza'); \r",
+									"});\r",
+									"\r",
+									"\r",
+									"var html = cheerio(responseBody);\r",
+									"var titleText = html.find('h1').text();\r",
+									"console.log(titleText);\r",
+									"console.log(html)\r",
+									"// add a test that ensures that there is some H1 content\r",
+									"tests[\"h1 heading contains `CloudPlaza`\"] = titleText.includes('CloudPlaza');\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}",
+							"host": [
+								"{{localhost}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Visa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f4e34956-d862-482c-9da1-b5da6e4dfc55",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"JSON response code contains `holiday visa`\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.added).to.have.string('holiday visa');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"working holiday visa\"\n\t, \"validity\": 365\n\t, \"costs\": 295\n\t, \"eligibleCountries\": [\"Argentina\",\"Austria\",\"Chile\",\"China, People's Republic of\",\"Czech Republic\",\"Ecuador\",\"Greece\",\"Hungary\",\"Indonesia\",\"Israel\",\"Luxembourg\",\"Malaysia\",\"Peru\",\"Poland\",\"Portugal\",\"San Marino\",\"Singapore\",\"Slovak Republic\",\"Slovenia\",\"Spain\",\"Thailand\",\"Turkey\",\"Uruguay\",\"United States of America\",\"Vietnam\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/visas",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"visas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Visa w/ missing params",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "adc6d95a-9ee9-4f78-a44a-419d800b7b6c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"working holiday visa\"\n\t, \"costs\": 295\n\t, \"eligibleCountries\": [\"Argentina\",\"Austria\",\"Chile\",\"China, People's Republic of\",\"Czech Republic\",\"Ecuador\",\"Greece\",\"Hungary\",\"Indonesia\",\"Israel\",\"Luxembourg\",\"Malaysia\",\"Peru\",\"Poland\",\"Portugal\",\"San Marino\",\"Singapore\",\"Slovak Republic\",\"Slovenia\",\"Spain\",\"Thailand\",\"Turkey\",\"Uruguay\",\"United States of America\",\"Vietnam\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/visas",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"visas"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5f8957e3-f1e0-4a5e-a402-cd7b1fd51e22",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "950f3138-bb13-46ed-a8f7-1a12cad173b9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e3d117a1-0f54-4216-a5d4-453b4c7bd091",
+			"key": "localhost",
+			"value": "http://127.0.0.1:3000/",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
