@@ -56,7 +56,7 @@ class CouplePlazaIntegrityTestCase(unittest.TestCase):
         engine = create_engine(self.database_path)
         table_names = inspect(engine).get_table_names()
 
-        # self.assertIn('country_visa', table_names)
+        self.assertIn('country_visa', table_names)
         self.assertIn('country', table_names)
         self.assertIn('visa', table_names)
         self.assertIn('region', table_names)
