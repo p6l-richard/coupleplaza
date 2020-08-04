@@ -1,0 +1,1 @@
+$env:PGUSER='postgres'; dropdb couple-plaza-test; createdb couple-plaza-test; $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'; pg_dump -d couple-plaza > couple-plaza.psql;psql -d couple-plaza-test -a -f couple-plaza.psql

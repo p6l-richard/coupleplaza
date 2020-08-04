@@ -4,7 +4,7 @@ from sqlalchemy import text, inspect, create_engine
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.engine import ResultProxy
 from api import create_app
-from api.models import db_path, db
+from api.models import db_path, db, Region, Country, Visa
 
 
 class CouplePlazaIntegrityTestCase(unittest.TestCase):
@@ -20,7 +20,6 @@ class CouplePlazaIntegrityTestCase(unittest.TestCase):
             # importing the db object from models provides the correct metadata
             self.db = db
             self.db.init_app(self.app)
-            self.db.create_all()
 
     def test_001_column_country_name(self):
         def get_country_name_or_err_code():
@@ -56,10 +55,48 @@ class CouplePlazaIntegrityTestCase(unittest.TestCase):
         engine = create_engine(self.database_path)
         table_names = inspect(engine).get_table_names()
 
-        self.assertIn('country_visa', table_names)
+        self.assertIn('visa_country', table_names)
         self.assertIn('country', table_names)
         self.assertIn('visa', table_names)
         self.assertIn('region', table_names)
+
+    def test_004_many2many(self):
+        with self.app.app_context():
+            if Region.query.first() is None:
+                # insert data to empty db
+                latam = Region(name='latin america')
+                db.session.add(latam)
+                brazil = Country(
+                    name='brazil', iso_code_2='br', iso_code_3='bra')
+                latam.countries.append(brazil)
+                db.session.add(brazil)
+            if not Country.query.filter_by(name='colombia').first():
+                colombia = Country(
+                    name='colombia', iso_code_2='co', iso_code_3='col')
+                if not 'latam' in locals():
+                    latam = Region.query.filter_by(
+                        name='latin america').first()
+                latam.countries.append(colombia)
+                db.session.add(colombia)
+
+            if not Visa.query.first():
+                new_visa = Visa(name='temporary resident visa',
+                                validity=365, costs=99)
+                brazil.issuing_visas.append(new_visa)
+                new_visa.valid_countries.append(colombia)
+                db.session.add(new_visa)
+
+            db.session.commit()
+
+            temp_visa = Visa.query.first()
+            print(temp_visa)
+            self.assertIsNotNone(temp_visa.valid_countries)
+
+            # testing correct cascade deletion
+            db.session.delete(Country.query.filter_by(name='colombia').first())
+            db.session.commit()
+            temp_visa = Visa.query.first()
+            self.assertFalse(temp_visa.valid_countries)
 
 
 if __name__ == '__main__':
