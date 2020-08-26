@@ -123,6 +123,23 @@ def create_app(test_config=None):
             db.session.commit()
             db.session.close()
 
+    @app.route('/api/visas/<int:id>', methods=['DELETE'])
+    def delete_visa(id):
+        visa_to_delete = Visa.query.get_or_404(id)
+        try:
+            db.session.delete(visa_to_delete)
+            return jsonify(
+                {"status": "success", "deleted": visa_to_delete.serialize}
+            )
+        except Exception as e:
+            db.session.rollback()
+            print('rolled back because of', e)
+            print(traceback.print_exc())
+            return {"status": "error", "error_desc": e, "error_message": traceback.print_exc()}, 400
+        finally:
+            db.session.commit()
+            db.session.close()
+
     return app
 
 
