@@ -1,0 +1,503 @@
+﻿--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.2
+-- Dumped by pg_dump version 12.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO postgres;
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.country (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    iso_code_3 character varying(3) NOT NULL,
+    iso_code_2 character varying(2) NOT NULL,
+    region_id integer NOT NULL
+);
+
+
+ALTER TABLE public.country OWNER TO postgres;
+
+--
+-- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.country_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.country_id_seq OWNER TO postgres;
+
+--
+-- Name: country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.country_id_seq OWNED BY public.country.id;
+
+
+--
+-- Name: region; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.region (
+    id integer NOT NULL,
+    name character varying NOT NULL
+);
+
+
+ALTER TABLE public.region OWNER TO postgres;
+
+--
+-- Name: region_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.region_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.region_id_seq OWNER TO postgres;
+
+--
+-- Name: region_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.region_id_seq OWNED BY public.region.id;
+
+
+--
+-- Name: visa; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.visa (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    validity integer NOT NULL,
+    costs integer NOT NULL,
+    issuing_country_id integer NOT NULL,
+    some_string character varying
+);
+
+
+ALTER TABLE public.visa OWNER TO postgres;
+
+--
+-- Name: visa_country; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.visa_country (
+    visa_id integer NOT NULL,
+    country_id integer NOT NULL
+);
+
+
+ALTER TABLE public.visa_country OWNER TO postgres;
+
+--
+-- Name: visa_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.visa_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.visa_id_seq OWNER TO postgres;
+
+--
+-- Name: visa_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.visa_id_seq OWNED BY public.visa.id;
+
+
+--
+-- Name: country id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country ALTER COLUMN id SET DEFAULT nextval('public.country_id_seq'::regclass);
+
+
+--
+-- Name: region id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.region ALTER COLUMN id SET DEFAULT nextval('public.region_id_seq'::regclass);
+
+
+--
+-- Name: visa id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa ALTER COLUMN id SET DEFAULT nextval('public.visa_id_seq'::regclass);
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+c2abc1bccde4
+\.
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.country (id, name, iso_code_3, iso_code_2, region_id) FROM stdin;
+2	Afghanistan	AFG	AF	2
+3	Albania	ALB	AL	3
+4	Algeria	DZA	DZ	4
+5	Andorra	AND	AD	3
+6	Angola	AGO	AO	4
+7	Argentina	ARG	AR	5
+8	Armenia	ARM	AM	3
+9	Australia	AUS	AU	6
+10	Austria	AUT	AT	3
+11	Azerbaijan	AZE	AZ	3
+12	Bahamas	BHS	BS	7
+13	Bahrain	BHR	BH	8
+14	Bangladesh	BGD	BD	2
+15	Barbados	BRB	BB	7
+16	Belarus	BLR	BY	3
+17	Belgium	BEL	BE	3
+18	Belize	BLZ	BZ	5
+19	Benin	BEN	BJ	4
+20	Bermuda	BMU	BM	7
+21	Bhutan	BTN	BT	2
+22	Bolivia	BOL	BO	5
+23	Bosnia and Herzegovina	BIH	BA	3
+24	Botswana	BWA	BW	4
+25	Brazil	BRA	BR	5
+26	Brunei Darussalam	BRN	BN	2
+27	Bulgaria	BGR	BG	3
+28	Burkina Faso	BFA	BF	4
+29	Burundi	BDI	BI	4
+30	Cambodia	KHM	KH	2
+31	Cameroon	CMR	CM	4
+32	Canada	CAN	CA	7
+33	Central African Republic	CAF	CF	4
+34	Chad	TCD	TD	4
+35	Chile	CHL	CL	5
+36	China	CHN	CN	2
+37	Colombia	COL	CO	5
+38	Congo	COG	CG	4
+39	Costa Rica	CRI	CR	5
+40	CΓÇ£te d'Ivoire	CIV	CI	4
+41	Croatia	HRV	HR	3
+42	Cuba	CUB	CU	5
+43	Cyprus	CYP	CY	3
+44	Czechia	CZE	CZ	3
+45	Denmark	DNK	DK	3
+46	Djibouti	DJI	DJ	4
+47	Dominica	DMA	DM	7
+48	Dominican Republic	DOM	DO	7
+49	Ecuador	ECU	EC	5
+50	Egypt	EGY	EG	4
+51	El Salvador	SLV	SV	5
+52	Equatorial Guinea	GNQ	GQ	4
+53	Eritrea	ERI	ER	4
+54	Estonia	EST	EE	3
+55	Eswatini	SWZ	SZ	4
+56	Ethiopia	ETH	ET	4
+57	Falkland Islands	FLK	FK	3
+58	Faroe Islands	FRO	FO	3
+59	Fiji	FJI	FJ	6
+60	Finland	FIN	FI	3
+61	France	FRA	FR	3
+62	Gabon	GAB	GA	4
+63	Gambia	GMB	GM	4
+64	Georgia	GEO	GE	3
+65	Germany	DEU	DE	3
+66	Ghana	GHA	GH	4
+67	Gibraltar	GIB	GI	4
+68	Greece	GRC	GR	3
+69	Greenland	GRL	GL	3
+70	Guadeloupe	GLP	GP	4
+71	Guatemala	GTM	GT	5
+72	Guinea	GIN	GN	4
+73	Guinea-Bissau	GNB	GW	4
+74	Haiti	HTI	HT	7
+75	Honduras	HND	HN	7
+76	Hong Kong	HKG	HK	2
+77	Hungary	HUN	HU	3
+78	Iceland	ISL	IS	3
+79	India	IND	IN	2
+80	Indonesia	IDN	ID	2
+81	Iran	IRN	IR	8
+82	Iraq	IRQ	IQ	8
+83	Ireland	IRL	IE	3
+84	Israel	ISR	IL	8
+85	Italy	ITA	IT	3
+86	Jamaica	JAM	JM	7
+87	Japan	JPN	JP	2
+88	Jersey	JEY	JE	7
+89	Jordan	JOR	JO	8
+90	Kazakhstan	KAZ	KZ	3
+91	Kenya	KEN	KE	4
+92	Kuwait	KWT	KW	4
+93	Kyrgyzstan	KGZ	KG	3
+94	Latvia	LVA	LV	3
+95	Lebanon	LBN	LB	8
+96	Liberia	LBR	LR	4
+97	Libya	LBY	LY	4
+98	Liechtenstein	LIE	LI	3
+99	Lithuania	LTU	LT	3
+100	Luxembourg	LUX	LU	3
+101	Macao	MAC	MO	2
+102	North Macedonia	MKD	MK	3
+103	Madagascar	MDG	MG	4
+104	Malawi	MWI	MW	4
+105	Malaysia	MYS	MY	2
+106	Maldives	MDV	MV	4
+107	Mali	MLI	ML	4
+108	Malta	MLT	MT	3
+109	Martinique	MTQ	MQ	4
+110	Mauritania	MRT	MR	4
+111	Mauritius	MUS	MU	4
+112	Mexico	MEX	MX	5
+113	Moldova	MDA	MD	3
+114	Mongolia	MNG	MN	2
+115	Montenegro	MNE	ME	3
+116	Montserrat	MSR	MS	4
+117	Morocco	MAR	MA	4
+118	Mozambique	MOZ	MZ	4
+119	Myanmar	MMR	MM	2
+120	Namibia	NAM	NA	4
+121	Nepal	NPL	NP	2
+122	Netherlands	NLD	NL	3
+123	New Zealand	NZL	NZ	6
+124	Nicaragua	NIC	NI	5
+125	Niger	NER	NE	4
+126	Nigeria	NGA	NG	4
+127	Norway	NOR	NO	3
+128	Oman	OMN	OM	4
+129	Pakistan	PAK	PK	4
+130	Palestine	PSE	PS	8
+131	Panama	PAN	PA	5
+132	Papua New Guinea	PNG	PG	4
+133	Paraguay	PRY	PY	3
+134	Peru	PER	PE	5
+135	Philippines	PHL	PH	2
+136	Poland	POL	PL	3
+137	Portugal	PRT	PT	3
+138	Puerto Rico	PRI	PR	5
+139	Qatar	QAT	QA	8
+140	Romania	ROU	RO	3
+141	Russian Federation	RUS	RU	3
+142	Rwanda	RWA	RW	4
+143	Samoa	WSM	WS	4
+144	Saudi Arabia	SAU	SA	8
+145	Senegal	SEN	SN	4
+146	Serbia	SRB	RS	3
+147	Seychelles	SYC	SC	4
+148	Sierra Leone	SLE	SL	4
+149	Singapore	SGP	SG	2
+150	Slovakia	SVK	SK	3
+151	Slovenia	SVN	SI	3
+152	Somalia	SOM	SO	4
+153	South Africa	ZAF	ZA	4
+154	South Sudan	SSD	SS	4
+155	Spain	ESP	ES	3
+156	Sri Lanka	LKA	LK	4
+157	Sudan	SDN	SD	4
+158	Suriname	SUR	SR	4
+159	Sweden	SWE	SE	3
+160	Switzerland	CHE	CH	3
+161	Taiwan	TWN	TW	2
+162	Tajikistan	TJK	TJ	2
+163	Tanzania	TZA	TZ	4
+164	Thailand	THA	TH	2
+165	Togo	TGO	TG	4
+166	Tonga	TON	TO	4
+167	Trinidad and Tobago	TTO	TT	7
+168	Tunisia	TUN	TN	4
+169	Turkey	TUR	TR	8
+170	Turkmenistan	TKM	TM	3
+171	Uganda	UGA	UG	4
+172	Ukraine	UKR	UA	3
+173	United Arab Emirates	ARE	AE	8
+174	United Kingdom of Great Britain and Northern Ireland	GBR	GB	3
+175	United States of America	USA	US	7
+176	Uruguay	URY	UY	5
+177	Uzbekistan	UZB	UZ	2
+178	Vanuatu	VUT	VU	4
+179	Venezuela	VEN	VE	5
+180	Viet Nam	VNM	VN	2
+181	Western Sahara	ESH	EH	4
+182	Yemen	YEM	YE	8
+183	Zambia	ZMB	ZM	4
+184	Zimbabwe	ZWE	ZW	4
+\.
+
+
+--
+-- Data for Name: region; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.region (id, name) FROM stdin;
+2	Asia
+3	Europe
+4	Africa
+5	Latin America
+6	Oceania
+7	North America
+8	Middle East
+\.
+
+
+--
+-- Data for Name: visa; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.visa (id, name, validity, costs, issuing_country_id, some_string) FROM stdin;
+\.
+
+
+--
+-- Data for Name: visa_country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.visa_country (visa_id, country_id) FROM stdin;
+\.
+
+
+--
+-- Name: country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.country_id_seq', 184, true);
+
+
+--
+-- Name: region_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.region_id_seq', 8, true);
+
+
+--
+-- Name: visa_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.visa_id_seq', 46, true);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: region region_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.region
+    ADD CONSTRAINT region_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: visa_country visa_country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa_country
+    ADD CONSTRAINT visa_country_pkey PRIMARY KEY (visa_id, country_id);
+
+
+--
+-- Name: visa visa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa
+    ADD CONSTRAINT visa_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country country_region_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_region_id_fkey FOREIGN KEY (region_id) REFERENCES public.region(id);
+
+
+--
+-- Name: visa_country visa_country_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa_country
+    ADD CONSTRAINT visa_country_country_id_fkey FOREIGN KEY (country_id) REFERENCES public.country(id);
+
+
+--
+-- Name: visa_country visa_country_visa_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa_country
+    ADD CONSTRAINT visa_country_visa_id_fkey FOREIGN KEY (visa_id) REFERENCES public.visa(id);
+
+
+--
+-- Name: visa visa_issuing_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.visa
+    ADD CONSTRAINT visa_issuing_country_id_fkey FOREIGN KEY (issuing_country_id) REFERENCES public.country(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
