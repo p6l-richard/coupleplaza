@@ -48,7 +48,7 @@ class Visa(db.Model):
     @property
     def serialize(self):
         return {
-            "id": self.id, "name": self.name, "costs": self.costs, "some_string": self.some_string, "issuing_country_id": self.issuing_country_id, "issuing_country": self.issuing_country.name, "valid_countries": [item.serialize for item in self.valid_countries]
+            "id": self.id, "name": self.name, "costs": self.costs, "someString": self.some_string, "issuingCountryId": self.issuing_country_id, "issuingCountry": self.issuing_country.name, "validCountries": [item.serialize for item in self.valid_countries]
         }
 
     # @property
@@ -74,7 +74,7 @@ class Country(db.Model):
     def serialize(self):
         return {
             # , "visas": self.serialize_visas
-            "id": self.id, "name": self.name, "iso_code_3": self.iso_code_3, "iso_code_2": self.iso_code_2, "region_id": self.region_id, "region": self.region.serialize
+            "id": self.id, "name": self.name, "isoCode3": self.iso_code_3, "isoCode2": self.iso_code_2, "regionId": self.region_id, "region": self.region.serialize
         }
 
     # @property
