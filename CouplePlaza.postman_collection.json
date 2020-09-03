@@ -100,6 +100,104 @@
 					"response": []
 				},
 				{
+					"name": "Update Visa to add country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c852f7a0-c52a-4b3e-a8da-f9bfd251563f",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"JSON response code contains `Holiday Visa` for updated.name property with capital chars\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.updated.name).to.have.string('Holiday Visa');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON response contains `Lebanon` for lastValidCountry.name\", function() {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var lastValidCountry = jsonData.updated.validCountries.slice(-1)[0];\r",
+									"    pm.expect(lastValidCountry.name).to.have.string('Lebanon')\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Working Holiday Visa\"\n\t, \"validCountries\": [\"Argentina\",\"Austria\",\"Chile\",\"China\",\"Czechia\",\"Ecuador\",\"Greece\",\"Hungary\",\"Indonesia\",\"Israel\",\"Luxembourg\",\"Malaysia\",\"Peru\",\"Poland\",\"Portugal\",\"Singapore\",\"Slovakia\",\"Slovenia\",\"Spain\",\"Thailand\",\"Turkey\",\"Uruguay\",\"United States of America\",\"Viet Nam\", \"Lebanon\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/visas/{{visa_id}}",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"visas",
+								"{{visa_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Visa with unknown Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "574ec692-bbc1-40e5-bf17-24c40c1c21b2",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Working Holiday Visa\"\n\t, \"validCountries\": [\"Argentina\",\"Austria\",\"Chile\",\"China\",\"Czechia\",\"Ecuador\",\"Greece\",\"Hungary\",\"Indonesia\",\"Israel\",\"Luxembourg\",\"Malaysia\",\"Peru\",\"Poland\",\"Portugal\",\"Singapore\",\"Slovakia\",\"Slovenia\",\"Spain\",\"Thailand\",\"Turkey\",\"Uruguay\",\"United States of America\",\"Viet Nam\", \"Lebanon\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/visas/999",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"visas",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Remove Visa",
 					"event": [
 						{
@@ -204,13 +302,13 @@
 	],
 	"variable": [
 		{
-			"id": "63a280b8-c3ce-4115-8f44-ffd741015c2f",
+			"id": "c0b2342f-f1b2-423a-b811-c8313dbb65f7",
 			"key": "localhost",
 			"value": "http://127.0.0.1:3000/",
 			"type": "string"
 		},
 		{
-			"id": "849ce8e8-0129-4cba-8611-cc4d9d0c9dcc",
+			"id": "0adfc0a3-7052-4f56-9ebe-a1dce6133b66",
 			"key": "visa_id",
 			"value": "1",
 			"type": "string"
