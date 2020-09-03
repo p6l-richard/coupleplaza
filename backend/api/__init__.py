@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
+from sqlalchemy.sql import select, column
+# from sqlalchemy import select, text
 from api.models import db, db_path, setup_db, Visa, Country
 import traceback
 import re
@@ -136,6 +138,51 @@ def create_app(test_config=None):
             print('rolled back because of', e)
             print(traceback.print_exc())
             return {"status": "error", "error_desc": e, "error_message": traceback.print_exc()}, 400
+        finally:
+            db.session.commit()
+            db.session.close()
+
+    @app.route('/api/visas/<int:id>', methods=['PATCH'])
+    def update_visa(id):
+        # parse fields from request to understand which fields need patching
+        request_data = request.get_json()
+
+        valid_params = ['name', 'validity', 'costs',
+                        'valid_countries', 'issuing_country']
+        valid_params_camel = list(map(to_camel_case, valid_params))
+
+        # Return 400, if:
+        #   can't parse json from rqst
+        #   < 1 valid field
+        if not request_data:
+            return {"status": "error", "error_desc": "Request format not supported"}, 400
+
+        if not any(camel_key in valid_params_camel
+                   for camel_key in request_data.keys()):
+            return {"status": "error", "error_desc": "Missing required parameter"}, 400
+
+        # Ensure to use snake_case on columns
+        columns_in_snake = list(map(camel_to_snake, request_data.keys()))
+
+        visa = db.session.query(Visa).get_or_404(id)
+
+        try:
+            for attr in columns_in_snake:
+                if attr == 'valid_countries':
+                    continue
+
+                if getattr(visa, attr) != request_data[to_camel_case(attr)]:
+                    setattr(visa, attr, request_data[to_camel_case(attr)])
+            if 'valid_countries' in columns_in_snake:
+                visa.valid_countries = fetch_countries(
+                    request_data[to_camel_case('valid_countries')])
+
+            return {"status": "success", "updated": visa.serialize}
+        except Exception as e:
+            db.session.rollback()
+            print(traceback.print_exc())
+            print("ERROR:", e)
+            return "Something went wrong updating the data", 500
         finally:
             db.session.commit()
             db.session.close()
