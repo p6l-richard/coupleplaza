@@ -32,7 +32,6 @@ class Visa(db.Model):
     name = db.Column(db.String, nullable=False)
     validity = db.Column(db.Integer, nullable=False)
     costs = db.Column(db.Integer, nullable=False)
-    some_string = db.Column(db.String)
     issuing_country_id = db.Column(
         db.Integer, db.ForeignKey('country.id'), nullable=False)
     issuing_country = db.relationship(
@@ -48,7 +47,7 @@ class Visa(db.Model):
     @property
     def serialize(self):
         return {
-            "id": self.id, "name": self.name, "costs": self.costs, "someString": self.some_string, "issuingCountryId": self.issuing_country_id, "issuingCountry": self.issuing_country.name, "validCountries": [item.serialize for item in self.valid_countries]
+            "id": self.id, "name": self.name, "costs": self.costs, "validity": self.validity, "issuingCountryId": self.issuing_country_id, "issuingCountry": self.issuing_country.name, "validCountries": [item.serialize for item in self.valid_countries]
         }
 
     # @property
