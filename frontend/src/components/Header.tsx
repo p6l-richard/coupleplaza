@@ -3,29 +3,21 @@ import {
     Navbar, Nav, NavbarBrand, NavItem, Button //,NavLink
     , Container, Row, Col
 } from 'reactstrap';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, withAuth0 } from "@auth0/auth0-react";
 
 import logo from '../logo.png';
 
 
 export interface IAppProps {
+    auth0: any
 }
 
-export default class Header extends Component<IAppProps> {
-    readonly LoginOrLogoutLink = () => {
-        const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-        // const loginOrLogoutLink = !isAuthenticated ? '/login' : '/logout';
-        const loginOrLogoutString = !isAuthenticated ? 'Login' : 'Logout';
-        const logoutWithRedirect = () => 
-            logout({
-                returnTo: window.location.origin,
-            });
-
-        const loginOrLogoutWithRedirect = !isAuthenticated ? loginWithRedirect : logoutWithRedirect;
-        return <Button onClick={()=> loginOrLogoutWithRedirect()}>{loginOrLogoutString}</Button>;
-    }
+class Header extends Component<IAppProps> {
   
     public render() {
+        const {user, isAuthenticated, loginWithRedirect, logout} = this.props.auth0;
+        const LoginButton = () => !isAuthenticated && (<Button onClick={loginWithRedirect}>Login</Button>);
+        const LogoutButton = () => isAuthenticated && (<Button color="danger" onClick={logout}>Logout</Button>);
     return (
         <Container fluid="xs">
             <Row>
@@ -36,8 +28,11 @@ export default class Header extends Component<IAppProps> {
                         </NavbarBrand>
                     <Nav>
                         <NavItem>
-                            <this.LoginOrLogoutLink />
+                            {!isAuthenticated ? LoginButton() : LogoutButton()}
                         </NavItem>
+                        
+                        {isAuthenticated && (<NavItem><Button href="/admin">{user.name}</Button></NavItem>)}
+                        
                     </Nav>
                     </Navbar>
                 </Col>
@@ -46,3 +41,5 @@ export default class Header extends Component<IAppProps> {
     );
   }
 }
+
+export default withAuth0(Header);
