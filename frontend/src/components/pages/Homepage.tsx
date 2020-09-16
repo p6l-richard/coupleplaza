@@ -34,7 +34,7 @@ export default class Homepage extends React.Component<IAppProps> {
                         Find your next nomad destination
                         </p>
                         <p className="lead">
-                        <Button size="lg" color="info">Tell us your citizenships</Button>
+                        <Button size="lg" color="info" href="/cities">Tell us your citizenships</Button>
                         </p>
                         <p>Designed for international couple with different citizenships.</p>
                     </Jumbotron>

@@ -1,16 +1,23 @@
 import React, {Component} from 'react';
 import {
-    Navbar, Nav, NavbarBrand, NavItem, NavLink
+    Navbar, Nav, NavbarBrand, NavItem, Button //,NavLink
     , Container, Row, Col
 } from 'reactstrap';
+import { useAuth0, withAuth0 } from "@auth0/auth0-react";
+
 import logo from '../logo.png';
 
 
 export interface IAppProps {
+    auth0: any
 }
 
-export default class Header extends Component<IAppProps> {
-  public render() {
+class Header extends Component<IAppProps> {
+  
+    public render() {
+        const {user, isAuthenticated, loginWithRedirect, logout} = this.props.auth0;
+        const LoginButton = () => !isAuthenticated && (<Button onClick={loginWithRedirect}>Login</Button>);
+        const LogoutButton = () => isAuthenticated && (<Button color="danger" onClick={logout}>Logout</Button>);
     return (
         <Container fluid="xs">
             <Row>
@@ -21,8 +28,11 @@ export default class Header extends Component<IAppProps> {
                         </NavbarBrand>
                     <Nav>
                         <NavItem>
-                        <NavLink href="/login">Login</NavLink>
+                            {!isAuthenticated ? LoginButton() : LogoutButton()}
                         </NavItem>
+                        
+                        {isAuthenticated && (<NavItem><Button href="/admin">{user.name}</Button></NavItem>)}
+                        
                     </Nav>
                     </Navbar>
                 </Col>
@@ -31,3 +41,5 @@ export default class Header extends Component<IAppProps> {
     );
   }
 }
+
+export default withAuth0(Header);
