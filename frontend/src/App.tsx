@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Homepage from './components/pages/Homepage'
 import Serp from './components/pages/Serp'
 import Admin from './components/pages/Admin'
+import Profile from './components/pages/Profile'
 import Error from './components/pages/Error'
 import EditVisa from './components/pages/EditVisa'
 import { Switch, Route } from 'react-router-dom';
@@ -25,6 +26,7 @@ function App() {
           <Route path='/cities' component={Serp} exact />
           <PrivateRoute path='/admin' component={Admin} exact />
           <PrivateRoute path='/admin/visas/:id' component={EditVisa} exact />
+          <PrivateRoute path='/profile' component={Profile} exact />
           <Route component={Error}/>
         </Switch>
         </Col>
