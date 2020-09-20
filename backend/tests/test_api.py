@@ -4,7 +4,7 @@ from sqlalchemy import text, inspect, create_engine
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.engine import ResultProxy
 from api import create_app
-from api.models import db_path, db, Region, Country, Visa
+from api.models import db_path, db, Region, Country, Visa, User, user_visa, visa_country
 
 
 class CouplePlazaIntegrityTestCase(unittest.TestCase):
@@ -64,39 +64,101 @@ class CouplePlazaIntegrityTestCase(unittest.TestCase):
         with self.app.app_context():
             if Region.query.first() is None:
                 # insert data to empty db
-                latam = Region(name='latin america')
-                db.session.add(latam)
+                latam = Region(name='Latin America')
                 brazil = Country(
-                    name='brazil', iso_code_2='br', iso_code_3='bra')
+                    name='Brazil', iso_code_2='br', iso_code_3='bra')
                 latam.countries.append(brazil)
+                db.session.add(latam)
                 db.session.add(brazil)
-            if not Country.query.filter_by(name='colombia').first():
+            if not Country.query.filter_by(name='Colombia').first():
                 colombia = Country(
-                    name='colombia', iso_code_2='co', iso_code_3='col')
+                    name='Colombia', iso_code_2='co', iso_code_3='col')
                 if not 'latam' in locals():
                     latam = Region.query.filter_by(
-                        name='latin america').first()
+                        name='Latin America').first()
                 latam.countries.append(colombia)
                 db.session.add(colombia)
 
             if not Visa.query.first():
                 new_visa = Visa(name='temporary resident visa',
                                 validity=365, costs=99)
+                if not 'brazil' in locals():
+                    brazil = Country.query.filter_by(name='Brazil').first()
                 brazil.issuing_visas.append(new_visa)
+                if not 'colombia' in locals():
+                    colombia = Country.query.filter_by(name='Colombia').first()
                 new_visa.valid_countries.append(colombia)
                 db.session.add(new_visa)
 
             db.session.commit()
 
             temp_visa = Visa.query.first()
-            print(temp_visa)
             self.assertIsNotNone(temp_visa.valid_countries)
 
             # testing correct cascade deletion
-            db.session.delete(Country.query.filter_by(name='colombia').first())
+            to_delete = Country.query.filter_by(name='Colombia').first()
+            to_delete_id = to_delete.id
+            db.session.delete(to_delete)
             db.session.commit()
-            temp_visa = Visa.query.first()
-            self.assertFalse(temp_visa.valid_countries)
+            m2m = db.session.query(visa_country).filter_by(
+                country_id=to_delete_id).first()
+            self.assertFalse(m2m)
+
+    def test_005_visa_user_m2m(self):
+        with self.app.app_context():
+            # provide LATAM, brazil and colombia as region & countries for later use
+            if Region.query.first() is None:
+                # insert data to empty db
+                latam = Region(name='Latin America')
+                db.session.add(latam)
+                brazil = Country(
+                    name='Brazil', iso_code_2='br', iso_code_3='bra')
+                latam.countries.append(brazil)
+                db.session.add(brazil)
+            if not Country.query.filter_by(name='Colombia').first():
+                colombia = Country(
+                    name='Colombia', iso_code_2='co', iso_code_3='col')
+                if not 'latam' in locals():
+                    latam = Region.query.filter_by(
+                        name="Latin America").first()
+                latam.countries.append(colombia)
+                db.session.add(colombia)
+
+            # define values to assert later
+            email = "test@mail.com"
+            visa_name = "test visa"
+            validity = 1
+            costs = 1
+            # create new visa to add to user
+            new_visa = Visa(name=visa_name,
+                            validity=validity, costs=costs)
+            if not 'brazil' in locals():
+                brazil = Country.query.filter_by(
+                    name="Brazil").first()
+            brazil.issuing_visas.append(new_visa)
+            new_visa.valid_countries.append(colombia)
+            # create new user
+            new_user = User(email=email)
+            new_user.visas.append(new_visa)
+
+            # commit changes to db
+            db.session.add(new_user)
+            db.session.add(new_visa)
+            db.session.commit()
+
+            latest_user = User.query.order_by(User.id.desc()).first()
+            latest_user_id = latest_user.id
+            self.assertIn('visas', latest_user.serialize)
+            self.assertIn('id', latest_user.serialize['visas'][0])
+
+            # delete user & commit
+            db.session.delete(latest_user)
+            db.session.commit()
+            latest_user_visas = db.session.query(
+                user_visa).filter_by(user_id=latest_user_id).all()
+            self.assertFalse(latest_user_visas)
+
+            db.session.close()
 
 
 if __name__ == '__main__':
