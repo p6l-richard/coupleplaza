@@ -103,6 +103,52 @@ ALTER SEQUENCE public.region_id_seq OWNED BY public.region.id;
 
 
 --
+-- Name: user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    email character varying NOT NULL
+);
+
+
+ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_id_seq OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
+
+
+--
+-- Name: user_visa; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_visa (
+    user_id integer NOT NULL,
+    visa_id integer NOT NULL
+);
+
+
+ALTER TABLE public.user_visa OWNER TO postgres;
+
+--
 -- Name: visa; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -111,8 +157,7 @@ CREATE TABLE public.visa (
     name character varying NOT NULL,
     validity integer NOT NULL,
     costs integer NOT NULL,
-    issuing_country_id integer NOT NULL,
-    some_string character varying
+    issuing_country_id integer NOT NULL
 );
 
 
@@ -167,6 +212,13 @@ ALTER TABLE ONLY public.region ALTER COLUMN id SET DEFAULT nextval('public.regio
 
 
 --
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+
+
+--
 -- Name: visa id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -178,7 +230,7 @@ ALTER TABLE ONLY public.visa ALTER COLUMN id SET DEFAULT nextval('public.visa_id
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-c2abc1bccde4
+0a36e6bdf4cd
 \.
 
 
@@ -389,10 +441,29 @@ COPY public.region (id, name) FROM stdin;
 
 
 --
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."user" (id, email) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user_visa; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_visa (user_id, visa_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: visa; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.visa (id, name, validity, costs, issuing_country_id, some_string) FROM stdin;
+COPY public.visa (id, name, validity, costs, issuing_country_id) FROM stdin;
+65	working holiday visa	365	295	9
+67	hello	3	29	3
+66	new visa	123	20	3
 \.
 
 
@@ -401,6 +472,41 @@ COPY public.visa (id, name, validity, costs, issuing_country_id, some_string) FR
 --
 
 COPY public.visa_country (visa_id, country_id) FROM stdin;
+65	7
+65	10
+65	35
+65	36
+65	44
+65	49
+65	68
+65	77
+65	80
+65	84
+65	100
+65	105
+65	134
+65	136
+65	137
+65	149
+65	150
+65	151
+65	155
+65	164
+65	169
+65	176
+65	175
+65	180
+66	2
+66	3
+66	4
+67	2
+67	3
+67	4
+67	5
+67	6
+67	7
+66	7
+66	22
 \.
 
 
@@ -419,10 +525,17 @@ SELECT pg_catalog.setval('public.region_id_seq', 8, true);
 
 
 --
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 1, false);
+
+
+--
 -- Name: visa_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.visa_id_seq', 46, true);
+SELECT pg_catalog.setval('public.visa_id_seq', 67, true);
 
 
 --
@@ -450,6 +563,22 @@ ALTER TABLE ONLY public.region
 
 
 --
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_visa user_visa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_visa
+    ADD CONSTRAINT user_visa_pkey PRIMARY KEY (user_id, visa_id);
+
+
+--
 -- Name: visa_country visa_country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -471,6 +600,22 @@ ALTER TABLE ONLY public.visa
 
 ALTER TABLE ONLY public.country
     ADD CONSTRAINT country_region_id_fkey FOREIGN KEY (region_id) REFERENCES public.region(id);
+
+
+--
+-- Name: user_visa user_visa_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_visa
+    ADD CONSTRAINT user_visa_user_id_fkey FOREIGN KEY (user_id) REFERENCES public."user"(id);
+
+
+--
+-- Name: user_visa user_visa_visa_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_visa
+    ADD CONSTRAINT user_visa_visa_id_fkey FOREIGN KEY (visa_id) REFERENCES public.visa(id);
 
 
 --

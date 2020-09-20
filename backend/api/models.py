@@ -25,6 +25,14 @@ visa_country = db.Table(
         primary_key=True), db.Column(
         'country_id', db.Integer, db.ForeignKey('country.id'),
         primary_key=True))
+user_visa = db.Table(
+    'user_visa',
+    db.Column(
+        'user_id', db.Integer, db.ForeignKey('user.id'),
+        primary_key=True),
+    db.Column(
+        'visa_id', db.Integer, db.ForeignKey('visa.id'),
+        primary_key=True))
 
 
 class Visa(db.Model):
@@ -50,10 +58,6 @@ class Visa(db.Model):
             "id": self.id, "name": self.name, "costs": self.costs, "validity": self.validity, "issuingCountryId": self.issuing_country_id, "issuingCountry": self.issuing_country.name, "validCountries": [item.serialize for item in self.valid_countries]
         }
 
-    # @property
-    # def serialize_valid_countries(self):
-    #     return [item.serialize for item in self.valid_countries]
-
 
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,10 +80,6 @@ class Country(db.Model):
             "id": self.id, "name": self.name, "isoCode3": self.iso_code_3, "isoCode2": self.iso_code_2, "regionId": self.region_id, "region": self.region.serialize
         }
 
-    # @property
-    # def serialize_visas(self):
-    #     return [item.serialize for item in self.visas]
-
 
 class Region(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -93,3 +93,15 @@ class Region(db.Model):
         return {
             "id": self.id, "name": self.name
         }
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, nullable=False)
+    visas = db.relationship(
+        'Visa', secondary=user_visa, lazy='subquery', backref=db.backref(
+            'users', lazy=True))
+
+    @property
+    def serialize(self):
+        return {"id": self.id, "email": self.email, "visas": [item.serialize for item in self.visas]}
