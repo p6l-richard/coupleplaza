@@ -414,6 +414,56 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create User without params",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "256139eb-e578-402a-8fa6-3a463e370adf",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.satus(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success equals `false`\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.eql(false);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/users",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -443,13 +493,13 @@
 	],
 	"variable": [
 		{
-			"id": "b9d6c6b0-e92f-495a-a28a-78033555694b",
+			"id": "d1a4bc61-8834-40e8-9ce3-92d3b50014b7",
 			"key": "localhost",
 			"value": "http://127.0.0.1:3000/",
 			"type": "string"
 		},
 		{
-			"id": "0c7ea887-248c-4964-8440-bb8c903d1e45",
+			"id": "f54ff525-9388-4688-8268-d799b0d2fe36",
 			"key": "visa_id",
 			"value": "1",
 			"type": "string"
