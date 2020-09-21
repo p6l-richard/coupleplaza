@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy.sql import select, column
 # from sqlalchemy import select, text
-from api.models import db, db_path, setup_db, Visa, Country
+from api.models import db, db_path, setup_db, Visa, Country, User
 from api.auth import AuthError, requires_auth, requires_scope
 import traceback
 import re
@@ -230,6 +230,40 @@ def create_app(test_config=None):
             {"code": "Unauthorized",
              "description": "You don't have permission to execute this request"},
             403)
+
+    @app.route('/api/users', methods=['POST'])
+    # @requires_auth
+    def create_user():
+        if requires_scope('users:update'):
+            request_body = request.get_json()
+            if not request_body:
+                return {"status": "error", "error_desc": "Request does not contain any parameters"}, 400
+            params = request_body.keys()
+            if 'email' not in params:
+                return {"status": "error", "error_desc": "Missing required parameter"}, 400
+            if not all(param in ['email', 'visas'] for param in
+                       params):
+                return {"status": "error", "error_desc": "unknown parameter detected"}, 400
+            if User.query.filter_by(email=request_body['email']).first():
+                return {"status": "error", "error_desc": "Already present"}, 409
+            try:
+                new_user = User(email=request_body["email"])
+                if 'visas' in params:
+                    # fetch visas
+                    # update new_user to append visas
+                    pass
+                db.session.add(new_user)
+                db.session.commit()
+                latest_user = db.session.query(
+                    User).order_by(User.id.desc()).first()
+                return {"status": "success", "added": latest_user.serialize}
+            except Exception as e:
+                db.session.rollback()
+                print(traceback.print_exc())
+                print('rolledback because of', e)
+                return {"status": "error", "error_desc": "Someting went wrong on Server"}, 500
+            finally:
+                db.session.close()
 
     @app.errorhandler(AuthError)
     def handle_auth_error(ex):
