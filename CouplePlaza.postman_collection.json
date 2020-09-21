@@ -331,9 +331,9 @@
 									"    pm.expect(jsonData.added.email).to.eql(\"postman@couple-plaza.com\");\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Success equals `true`\", function () {\r",
+									"pm.test(\"Status equals `success`\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.status).to.eql(\"success\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -381,9 +381,9 @@
 									"    pm.response.to.have.status(409);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Success equals `false`\", function () {\r",
+									"pm.test(\"Status equals `error`\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(false);\r",
+									"    pm.expect(jsonData.status).to.eql(\"error\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -431,9 +431,9 @@
 									"    pm.response.to.have.satus(400);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Success equals `false`\", function () {\r",
+									"pm.test(\"Status equals `error`\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.success).to.eql(false);\r",
+									"    pm.expect(jsonData.status).to.eql(\"error\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -493,13 +493,13 @@
 	],
 	"variable": [
 		{
-			"id": "d1a4bc61-8834-40e8-9ce3-92d3b50014b7",
+			"id": "2828c81c-cf60-4ed7-975c-f9538fca672b",
 			"key": "localhost",
 			"value": "http://127.0.0.1:3000/",
 			"type": "string"
 		},
 		{
-			"id": "f54ff525-9388-4688-8268-d799b0d2fe36",
+			"id": "907a05a2-9d06-4b35-825a-f2f0ead64cb6",
 			"key": "visa_id",
 			"value": "1",
 			"type": "string"
