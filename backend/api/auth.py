@@ -1,6 +1,8 @@
 from jose import jwt
-from flask import request
+from flask import request, _request_ctx_stack
 from functools import wraps
+from six.moves.urllib.request import urlopen
+import json
 
 AUTH0_DOMAIN = 'p6l-richard.eu.auth0.com'
 API_AUDIENCE = 'https://localhost:3000/api'
@@ -51,6 +53,7 @@ def requires_auth(f):
         jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
+        print('SHOW HEADER:', unverified_header)
         rsa_key = {}
         for key in jwks["keys"]:
             if key["kid"] == unverified_header["kid"]:
@@ -98,7 +101,14 @@ def requires_scope(required_scope):
     """
     token = get_token_auth_header()
     unverified_claims = jwt.get_unverified_claims(token)
-    if unverified_claims.get("scope"):
+    if unverified_claims.get("scope") or unverified_claims.get("scopes"):
+        if "scopes" in unverified_claims.keys():
+            req_collection, req_action = required_scope.split(':')
+            authorized_collection = unverified_claims["scopes"].get(
+                req_collection)
+            authorized_actions = authorized_collection.get('actions')
+            if req_action in authorized_actions and authorized_collection:
+                return True
         token_scopes = unverified_claims["scope"].split()
         for token_scope in token_scopes:
             if token_scope == required_scope:
