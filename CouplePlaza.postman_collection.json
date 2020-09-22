@@ -428,7 +428,7 @@
 									"     pm.response.to.be.json;\r",
 									"});\r",
 									"pm.test(\"Status code is 400\", function () {\r",
-									"    pm.response.to.have.satus(400);\r",
+									"    pm.response.to.have.status(400);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Status equals `error`\", function () {\r",
@@ -464,6 +464,111 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Add Visas to User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a84bf0fd-671e-4e17-8563-73722945617e",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains posted visa\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.user.visas.id).to.eql(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/users/2/visas/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2",
+								"visas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Visas from User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5fbc679c-ea05-482c-b2bb-a43edb794d07",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response does not contain posted visa\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    if (jsonData.user.hasOwnProperty('visas')) {\r",
+									"        pm.expect(jsonData.user.visas.id).to.not.eql(1);\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/users/2/visas/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2",
+								"visas",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -493,13 +598,13 @@
 	],
 	"variable": [
 		{
-			"id": "2828c81c-cf60-4ed7-975c-f9538fca672b",
+			"id": "6e99dc42-3334-46e0-980a-04c50870a709",
 			"key": "localhost",
 			"value": "http://127.0.0.1:3000/",
 			"type": "string"
 		},
 		{
-			"id": "907a05a2-9d06-4b35-825a-f2f0ead64cb6",
+			"id": "a8c62949-d3d1-4f3b-9bbf-84c67cf72f9f",
 			"key": "visa_id",
 			"value": "1",
 			"type": "string"
