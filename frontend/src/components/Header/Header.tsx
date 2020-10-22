@@ -7,8 +7,8 @@ import logo from '../../logo.png';
 
 
 export interface HeaderProps {
-    user: any
-    , isLoading: boolean
+    user?: any
+    , isLoading?: boolean
     , loginWithRedirect: () => void
     , logout: () => void
     , handlePrivateAreaClick: (event: any) => void
