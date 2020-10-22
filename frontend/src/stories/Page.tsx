@@ -1,18 +1,19 @@
 import React from 'react';
 
-import { Header } from '../components/Header/Header';
+import Header from '../components/Header/Header';
 import './page.css';
 
 export interface PageProps {
   user?: {};
-  onLogin: () => void;
-  onLogout: () => void;
-  onCreateAccount: () => void;
+  isLoading?: boolean;
+  loginWithRedirect: () => void;
+  logout: () => void;
+  handlePrivateAreaClick: (event: any) => void;
 }
 
-export const Page: React.FC<PageProps> = ({ user, onLogin, onLogout, onCreateAccount }) => (
+export const Page: React.FC<PageProps> = ({ user, isLoading, loginWithRedirect, logout, handlePrivateAreaClick }) => (
   <article>
-    <Header user={user} onLogin={onLogin} onLogout={onLogout} onCreateAccount={onCreateAccount} />
+    <Header user={user || ''} loginWithRedirect={loginWithRedirect} logout={logout} handlePrivateAreaClick={handlePrivateAreaClick} isLoading={isLoading || false} />
 
     <section>
       <h2>Pages in Storybook</h2>
