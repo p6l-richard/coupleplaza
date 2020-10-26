@@ -6,7 +6,7 @@ import Card, { CardProps } from '../components/Card/Card';
 import { dummyVisa, dummyCountry } from '../global';
 
 export default {
-  title: 'Example/Card',
+  title: 'Example/Card/SingleCard',
   component: Card,
   argTypes: {
   },
@@ -21,5 +21,4 @@ VisaCard.args = {
 export const VisaCardNationality = Template.bind({});
 VisaCardNationality.args = {
   visa: JSON.parse(dummyVisa)
-  , nationality: JSON.parse(dummyCountry)
 };

@@ -5,7 +5,8 @@ module.exports = {
   ],
   "addons": [
     "@storybook/addon-links",
+    "@sambego/storybook-state",
     "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app"
+    "@storybook/preset-create-react-app",
   ]
 }

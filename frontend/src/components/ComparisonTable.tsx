@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
-import { 
+import {
     Row, Col
- } from "reactstrap";
+} from "reactstrap";
 import Flag from 'react-world-flags'
 import Emoji from "react-emoji-render";
 
@@ -10,13 +10,13 @@ interface Props {
     , destination: string
     , metrics: string[]
     , data: (number | string)[][]
-    
+
 }
 
 const metricHeaders = {
-    visaRequirement: <Emoji text="🛂"/>
-    , costs: <Emoji text="💲"/>
-    , stay: <Emoji text="⏳"/>
+    visaRequirement: <Emoji text="🛂" />
+    , costs: <Emoji text="💲" />
+    , stay: <Emoji text="⏳" />
 }
 
 
@@ -40,15 +40,15 @@ const parseVisaDataFrom = (data) => {
         }
     });
     return obj
-    
+
 }
 
 export default function ComparisonTable(props: Props): ReactElement {
     const visaData = parseVisaDataFrom(props.data)
-    
+
     const comparisonTableHeader = (
         <Row>
-            <Col xs="1"/>
+            <Col xs="1" />
             {props.nationalities.map((nationality: string) => {
                 return (
                     <Col className="text-center"><Flag code={nationality} height="11" /></Col>

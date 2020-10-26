@@ -13,6 +13,8 @@ import { Switch, Route } from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
+
+  // header properties
   const handlePrivateAreaClick = (event) => {
     event.preventDefault();
     window.location.href = adminOrProfilePath
@@ -20,8 +22,8 @@ function App() {
   const { user, loginWithRedirect, logout, isLoading } = useAuth0();
   // !TODO: Make path dynamic based on being ``admin`` or ``user``
   const adminOrProfilePath = '/profile';
-
   const headerArgs = { handlePrivateAreaClick, user, loginWithRedirect, logout, isLoading }
+
 
   return (
     <Container fluid="xs" className="App">
