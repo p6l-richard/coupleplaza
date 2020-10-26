@@ -53,6 +53,7 @@
   "proxy": "http://127.0.0.1:5000/",
   "devDependencies": {
     "@babel/core": "^7.12.3",
+    "@sambego/storybook-state": "^2.0.1",
     "@storybook/addon-actions": "^6.0.26",
     "@storybook/addon-essentials": "^6.0.26",
     "@storybook/addon-links": "^6.0.26",
